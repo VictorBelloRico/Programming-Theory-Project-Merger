@@ -5,17 +5,17 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField] private Color baseColor, offsetColor;
-    [SerializeField] private SpriteRenderer renderer;
+    [SerializeField] private SpriteRenderer myRenderer;
 
     public void Init(bool isOffset)
     {
         if (isOffset)
         {
-            renderer.color = offsetColor;
+            myRenderer.color = offsetColor;
         }
         else
         {
-            renderer.color = baseColor;
+            myRenderer.color = baseColor;
         }
     }
 

@@ -99,4 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseColor: {r: 0.8396226, g: 0.767065, b: 0.4000089, a: 1}
   offsetColor: {r: 0.9056604, g: 0.7972741, b: 0.43147027, a: 1}
-  renderer: {fileID: 1907480032384368819}
+  myRenderer: {fileID: 1907480032384368819}

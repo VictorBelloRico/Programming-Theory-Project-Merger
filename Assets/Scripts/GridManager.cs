@@ -7,7 +7,8 @@ using UnityEditor;
 
 public class GridManager : MonoBehaviour
 {
-    private int witdh, height;
+    private int witdh = 4;
+    private int height = 4;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform cam;
 
@@ -56,7 +57,8 @@ public class GridManager : MonoBehaviour
     {
         if (EmptyTiles.Count == 0)
         {
-            Exit();
+            //Exit();
+            Debug.Log("Ahora me habría cerrado");
         }
         else
         {
