@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CircleLvl1
+  - CircleLvl2
+  - CircleLvl3
+  - SquareLvl1
+  - SquareLvl2
+  - SquareLvl3
+  - TriangleLvl1
+  - TriangleLvl2
+  - TriangleLvl3
   layers:
   - Default
   - TransparentFX

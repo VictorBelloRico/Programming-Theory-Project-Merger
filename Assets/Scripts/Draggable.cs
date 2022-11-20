@@ -39,7 +39,6 @@ public class Draggable : MonoBehaviour
         {
             transform.position = initialPosition;
         }
-
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -47,12 +46,7 @@ public class Draggable : MonoBehaviour
 
         isCollided = true;
 
-        string thisGameObjectName = gameObject.name.Substring(0, name.IndexOf("_"));
-        string collisionGameobjectName = collision.gameObject.name.Substring(0, name.IndexOf("_"));
-        Debug.Log("Item1" + thisGameObjectName + "AND Item2" + collisionGameobjectName);
-
-        if (mouseButtonReleased && thisGameObjectName == collisionGameobjectName)
-        {
+        if (mouseButtonReleased && gameObject.tag == collision.tag){
             GridManager.Instance.LiberateGridTile(initialPosition);
             Vector3 position = collision.transform.position;
             mouseButtonReleased = false;
@@ -60,7 +54,7 @@ public class Draggable : MonoBehaviour
             Destroy(gameObject);
             Merge(position);
         }
-        else if (mouseButtonReleased && thisGameObjectName != collisionGameobjectName)
+        else if (mouseButtonReleased && gameObject.tag != collision.tag)
         {
             transform.position = initialPosition;
         }
@@ -73,5 +67,4 @@ public class Draggable : MonoBehaviour
     public virtual void Merge(Vector3 position)
     {
     }
-
 }
