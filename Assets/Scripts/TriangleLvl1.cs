@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TriangleLvl1 : Draggable
 {
-    public override void Merge(Vector3 position)
+    public override void Merge(Vector3 instantiatePosition, Vector3 liberatePosition)
     {
-        Instantiate(Resources.Load("TriangleLvl2_Object"), position, Quaternion.identity);
+        Instantiate(Resources.Load("TriangleLvl2_Object"), instantiatePosition, Quaternion.identity);
+        GridManager.Instance.LiberateGridTile(liberatePosition);
     }
 }

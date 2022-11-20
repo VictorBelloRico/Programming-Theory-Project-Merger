@@ -7,17 +7,13 @@ using UnityEditor;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int witdh, height;
+    private int witdh, height;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform cam;
 
-    //private Dictionary<Vector2, Tile> tiles;
-    public Dictionary<Vector2, bool> emptyTiles;
-
-    public List<GameObject> items;
-
-    private bool isGameActive;
-    public int freeTilesCount = 16;
+    private List<Vector2> FullTiles = new List<Vector2>();
+    private List<Vector2> EmptyTiles = new List<Vector2>();
+    [SerializeField] List<GameObject> items;
 
     public static GridManager Instance { get; private set; }
 
@@ -30,28 +26,17 @@ public class GridManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
-        isGameActive = true;
         GenerateGrid();
-        StartCoroutine(SpawnItem());
+        InvokeRepeating("SpawnItem", 1.0f, 1.0f);
     }
 
-    private void Update()
-    {
-        if (freeTilesCount == 0)
-        {
-            Exit();
-        }
-    }
     void GenerateGrid()
     {
-        //tiles = new Dictionary<Vector2, Tile>();
-        emptyTiles = new Dictionary<Vector2, bool>();
         for (int x = 0; x < witdh; x++)
         {
             for (int y = 0; y < height; y++)
@@ -62,76 +47,41 @@ public class GridManager : MonoBehaviour
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 spawnnedTile.Init(isOffset);
 
-                emptyTiles[new Vector2(x, y)] = true;
-                //tiles[new Vector2(x, y)] = spawnnedTile;
+                EmptyTiles.Add(new Vector2(x, y));
             }
-
         }
         cam.transform.position = new Vector3((float)witdh / 2 - 0.5f, (float)height / 2 - 0.5f, -10);
     }
-
-    public bool IsTileEmpty(Vector2 pos)
+    void SpawnItem()
     {
-        if (emptyTiles.TryGetValue(pos, out var isEmpty))
+        if (EmptyTiles.Count == 0)
         {
-            return isEmpty;
+            Exit();
         }
-        return false;
-
-    }
-
-
-    /*empezar corrutina de instatiate
-    cada x segundos:
-        -Obtener una x,y en random.range(4)
-        -Comprobar si la tile correspondiente está vacía
-            -Si está vacía, generar un item
-            -Si no está vacía, buscar otra
-    */
-
-    IEnumerator SpawnItem()
-    {
-        while (isGameActive)
+        else
         {
-            yield return new WaitForSeconds(2);
-            bool keepSearching = true;
-            while (keepSearching)
-            {
-                var randomTile = GenerateRandomTile();
-                if (IsTileEmpty(randomTile))
-                {
-                    int index = Random.Range(0, items.Count);
-                    Instantiate(items[index], randomTile, Quaternion.identity);
-                    emptyTiles[randomTile] = false;
-                    keepSearching = false;
-                    freeTilesCount -= 1;
-                }
-            }
+            int RandomTileIdx = Random.Range(0, EmptyTiles.Count);
+            int randomItemIdx = Random.Range(0, items.Count);
+            Instantiate(items[randomItemIdx], EmptyTiles[RandomTileIdx], Quaternion.identity);
+            FullTiles.Add(EmptyTiles[RandomTileIdx]);
+            EmptyTiles.Remove(EmptyTiles[RandomTileIdx]);
 
         }
-
     }
-
-    public Vector2 GenerateRandomTile()
+    public void LiberateGridTile(Vector2 tile)
     {
-        var x = Random.Range(0, 4);
-        var y = Random.Range(0, 4);
-        return new Vector2(x, y);
+        FullTiles.Remove(tile);
+        EmptyTiles.Add(tile);
     }
 
-    /*Create 2 forms of LiberateGirdTile:
-     *  -One wit 1 Vector2 parameter, to liberate 1 tile when Lvl1 are merged
-     *  -The other with 2 Vector2 parameter, to liberate 2 tiles when Lvl2 are merged
-     *  -Hay que enviar las posiciones desde el propio script de cada item
-      
-     
-     */
-    public void LiberateGridTile(Vector2 pos)
+    public void LiberateGridTile(Vector2 tile1, Vector2 tile2)
     {
-        emptyTiles[pos] = true;
-        freeTilesCount += 1;
-    }
+        FullTiles.Remove(tile1);
+        EmptyTiles.Add(tile1);
 
+        FullTiles.Remove(tile2);
+        EmptyTiles.Add(tile2);
+    }
     public void Exit()
     {
 #if UNITY_EDITOR

@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class CircleLvl1 : Draggable
 {
-    public override void Merge(Vector3 position)
+    public override void Merge(Vector3 instantiatePosition,  Vector3 liberatePosition)
     {
-        Instantiate(Resources.Load("CircleLvl2_Object"), position, Quaternion.identity);
+        Instantiate(Resources.Load("CircleLvl2_Object"), instantiatePosition, Quaternion.identity);
+        GridManager.Instance.LiberateGridTile(liberatePosition);
     }
 }

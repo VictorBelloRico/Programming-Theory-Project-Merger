@@ -5,11 +5,14 @@ using UnityEngine;
 public class Draggable : MonoBehaviour
 {
 
-    Vector3 mousePositionOffset;
+    protected Vector3 mousePositionOffset;
     protected Vector2 initialPosition;
 
-    public static bool mouseButtonReleased;
-    public static bool isCollided;
+    private static bool mouseButtonReleased;
+    private bool isCollided;
+    private bool isSelected;
+
+
 
     private void Awake()
     {
@@ -20,10 +23,12 @@ public class Draggable : MonoBehaviour
     {
         return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
+
     private void OnMouseDown()
     {
         mouseButtonReleased = false;
         isCollided = false;
+        isSelected = true;
         mousePositionOffset = gameObject.transform.position - GetMouseWorldPosition();
     }
 
@@ -38,21 +43,21 @@ public class Draggable : MonoBehaviour
         if (!isCollided)
         {
             transform.position = initialPosition;
+            isSelected = false;
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-
         isCollided = true;
 
-        if (mouseButtonReleased && gameObject.tag == collision.tag){
-            GridManager.Instance.LiberateGridTile(initialPosition);
-            Vector3 position = collision.transform.position;
+        if (isSelected && mouseButtonReleased && gameObject.tag == collision.tag)
+        {
+            Vector3 instatiatePosition = collision.transform.position;
             mouseButtonReleased = false;
             Destroy(collision.gameObject);
             Destroy(gameObject);
-            Merge(position);
+            Merge(instatiatePosition, initialPosition);
         }
         else if (mouseButtonReleased && gameObject.tag != collision.tag)
         {
@@ -64,7 +69,7 @@ public class Draggable : MonoBehaviour
         isCollided = false;
     }
 
-    public virtual void Merge(Vector3 position)
+    public virtual void Merge(Vector3 instantiatePosition, Vector3 liberatePosition)
     {
     }
 }
