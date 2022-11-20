@@ -57,8 +57,7 @@ public class GridManager : MonoBehaviour
     {
         if (EmptyTiles.Count == 0)
         {
-            //Exit();
-            Debug.Log("Ahora me habría cerrado");
+            Exit();
         }
         else
         {
