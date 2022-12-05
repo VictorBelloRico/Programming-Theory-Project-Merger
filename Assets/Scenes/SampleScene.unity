@@ -236,15 +236,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10cccfcd7b51a234580ac6a218fcf984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  witdh: 4
-  height: 4
   tilePrefab: {fileID: 406126387846298279, guid: c9c4b05498663ec47ae8db8b5df47636, type: 3}
   cam: {fileID: 519420032}
   items:
   - {fileID: 8871183714452500935, guid: 5fad25d95121111448013df221188dde, type: 3}
   - {fileID: 5262883760872060143, guid: a7b5b022dd818de43bc6dcece2b6b51b, type: 3}
   - {fileID: 7812942902082129127, guid: a87cc755f15b54d4ea75cf27107fe861, type: 3}
-  freeTilesCount: 16
   TeamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &1905856013
 Transform:
