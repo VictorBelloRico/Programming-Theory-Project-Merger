@@ -72,4 +72,11 @@ public class Draggable : MonoBehaviour
     public virtual void Merge(Vector3 instantiatePosition, Vector3 liberatePosition)
     {
     }
+    private void Update()
+    {
+        if (!GameManager.Instance.isGameActive)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

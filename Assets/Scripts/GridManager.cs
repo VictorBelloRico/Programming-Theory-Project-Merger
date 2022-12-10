@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class GridManager : MonoBehaviour
 {
@@ -18,8 +15,6 @@ public class GridManager : MonoBehaviour
 
     public static GridManager Instance { get; private set; }
 
-    public Color TeamColor;
-
     private void Awake()
     {
         if (Instance != null)
@@ -28,10 +23,10 @@ public class GridManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
+        GameManager.Instance.isGameActive = true;
         GenerateGrid();
         InvokeRepeating("SpawnItem", 1.0f, 1.0f);
     }
@@ -55,20 +50,25 @@ public class GridManager : MonoBehaviour
     }
     void SpawnItem()
     {
-        if (EmptyTiles.Count == 0)
+        if (GameManager.Instance.isGameActive)
         {
-            Exit();
-        }
-        else
-        {
-            int RandomTileIdx = Random.Range(0, EmptyTiles.Count);
-            int randomItemIdx = Random.Range(0, items.Count);
-            Instantiate(items[randomItemIdx], EmptyTiles[RandomTileIdx], Quaternion.identity);
-            FullTiles.Add(EmptyTiles[RandomTileIdx]);
-            EmptyTiles.Remove(EmptyTiles[RandomTileIdx]);
+            if (EmptyTiles.Count == 0)
+            {
+                GameManager.Instance.GameOver();
+            }
+            else
+            {
+                int RandomTileIdx = Random.Range(0, EmptyTiles.Count);
+                int randomItemIdx = Random.Range(0, items.Count);
+                Instantiate(items[randomItemIdx], EmptyTiles[RandomTileIdx], Quaternion.identity);
+                FullTiles.Add(EmptyTiles[RandomTileIdx]);
+                EmptyTiles.Remove(EmptyTiles[RandomTileIdx]);
 
+            }
         }
+       
     }
+
     public void LiberateGridTile(Vector2 tile)
     {
         FullTiles.Remove(tile);
@@ -82,13 +82,5 @@ public class GridManager : MonoBehaviour
 
         FullTiles.Remove(tile2);
         EmptyTiles.Add(tile2);
-    }
-    public void Exit()
-    {
-#if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-#else
-        Application.Quit(); // original code to quit Unity player
-#endif
     }
 }

@@ -18,5 +18,11 @@ public class Tile : MonoBehaviour
             myRenderer.color = baseColor;
         }
     }
-
+    private void Update()
+    {
+        if (!GameManager.Instance.isGameActive)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
